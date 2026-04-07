@@ -23,7 +23,7 @@ FB_PAGES = [
 ]
 
 SEEN_FILE       = "seen_posts.json"
-MAX_POSTS       = 5   # hər səhifədən son neçə post yoxlansın
+MAX_POSTS       = 10   # hər səhifədən son neçə post yoxlansın
 # ──────────────────────────────────────────────────────────────────────────────
 
 
