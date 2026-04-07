@@ -2,14 +2,13 @@ name: FB Monitor
 
 on:
   schedule:
-    - cron: "0 */2 * * *"   # hər 2 saatdan bir işləyir (UTC vaxtı ilə)
-  workflow_dispatch:          # əl ilə də işlədə bilərsən (test üçün)
+    - cron: "0 */2 * * *"   # hər 2 saatdan bir (UTC)
+  workflow_dispatch:
 
 jobs:
   monitor:
     runs-on: ubuntu-latest
 
-    # seen_posts.json repo-ya yazma icazəsi
     permissions:
       contents: write
 
@@ -25,8 +24,16 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
+      - name: seen_posts.json yoxdursa yarat
+        run: |
+          if [ ! -f seen_posts.json ]; then
+            echo "[]" > seen_posts.json
+          fi
+
       - name: Asılılıqları yüklə
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Scraper-i işlət
         env:
@@ -39,6 +46,5 @@ jobs:
           git config user.name  "fb-monitor-bot"
           git config user.email "bot@fb-monitor"
           git add seen_posts.json
-          # Dəyişiklik yoxdursa commit etmə
           git diff --cached --quiet || git commit -m "chore: seen posts yeniləndi [skip ci]"
           git push
