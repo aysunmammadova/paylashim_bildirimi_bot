@@ -18,8 +18,8 @@ TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 # Facebook səhifə slug-ları — URL-dəki hissə
 # Məs: facebook.com/sosialmudafiefondu → "sosialmudafiefondu"
 FB_PAGES = [
-    "https://www.facebook.com/dsmf.sosial.gov.az",   # ← öz slug-unla dəyişdir
-    "https://www.facebook.com/sosial.gov.az",         # ← öz slug-unla dəyişdir
+    "dsmf.sosial.gov.az",   # ← öz slug-unla dəyişdir
+    "sosial.gov.az",         # ← öz slug-unla dəyişdir
 ]
 
 SEEN_FILE       = "seen_posts.json"
