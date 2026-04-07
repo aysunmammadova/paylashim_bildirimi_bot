@@ -1,0 +1,44 @@
+name: FB Monitor
+
+on:
+  schedule:
+    - cron: "0 */2 * * *"   # hər 2 saatdan bir işləyir (UTC vaxtı ilə)
+  workflow_dispatch:          # əl ilə də işlədə bilərsən (test üçün)
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    # seen_posts.json repo-ya yazma icazəsi
+    permissions:
+      contents: write
+
+    steps:
+      - name: Repo-nu yüklə
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Python qur
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Asılılıqları yüklə
+        run: pip install -r requirements.txt
+
+      - name: Scraper-i işlət
+        env:
+          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scraper.py
+
+      - name: seen_posts.json-u commit et
+        run: |
+          git config user.name  "fb-monitor-bot"
+          git config user.email "bot@fb-monitor"
+          git add seen_posts.json
+          # Dəyişiklik yoxdursa commit etmə
+          git diff --cached --quiet || git commit -m "chore: seen posts yeniləndi [skip ci]"
+          git push
